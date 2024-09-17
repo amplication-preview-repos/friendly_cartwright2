@@ -1,0 +1,58 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Address {
+  city      String?
+  country   String?
+  createdAt DateTime   @default(now())
+  hospitals Hospital[]
+  id        String     @id @default(cuid())
+  line1     String?
+  line2     String?
+  state     String?
+  updatedAt DateTime   @updatedAt
+  zipcode   String?
+}
+
+model Hospital {
+  address     Address? @relation(fields: [addressId], references: [id])
+  addressId   String?
+  createdAt   DateTime @default(now())
+  description String?
+  id          String   @id @default(cuid())
+  name        String?
+  reviews     Review[]
+  updatedAt   DateTime @updatedAt
+}
+
+model Review {
+  comments   String?
+  createdAt  DateTime  @default(now())
+  hospital   Hospital? @relation(fields: [hospitalId], references: [id])
+  hospitalId String?
+  id         String    @id @default(cuid())
+  rating     Int?
+  updatedAt  DateTime  @updatedAt
+}
+
+model Coordinates {
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  latitude  Float?
+  longitude Float?
+  updatedAt DateTime @updatedAt
+}
+
+model Blog {
+  content   String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  title     String?
+  updatedAt DateTime @updatedAt
+}
